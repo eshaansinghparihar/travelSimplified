@@ -1,7 +1,7 @@
-function MinCost({number}){
+function MinCost(){
     return(
         <div>
-            This is the component based on Minimum Cost with passed data = <h1> {number} </h1>
+            This is the component based on Minimum Cost with passed data
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { Paper, Tab ,Tabs} from '@material-ui/core';
-import TodayIcon from '@material-ui/icons/Today';
-import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
+import DriveEtaIcon from '@material-ui/icons/DriveEta';
+import FlightIcon from '@material-ui/icons/Flight';
 import { Link } from 'react-router-dom';
 import { withStyles } from "@material-ui/core/styles";
 const styles = (theme) => ({
@@ -30,8 +30,8 @@ class Navigation extends Component{
     const { classes } = this.props;
     return (
         <Tabs variant="fullWidth" value={this.state.value} onChange={(event, newValue) => {this.setState({value:newValue});}} className={classes.root}>
-        < Tab component={Link} label="Based On Distance" value="/" to='/' icon={<AccountBalance fontSize="small"/>}/>
-        <Tab component={Link} label="Based On Cost" value="/minimumcost" to='/minimumcost' icon={<TodayIcon fontSize="small"/>}/>
+        < Tab component={Link} label="Based On Distance & Time" value="/" to='/' icon={<DriveEtaIcon fontSize="medium"/>}/>
+        <Tab component={Link} label="Based On Cost" value="/minimumcost" to='/minimumcost' icon={<FlightIcon fontSize="medium"/>}/>
         </Tabs>
     );
   }
