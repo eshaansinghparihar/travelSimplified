@@ -1,24 +1,59 @@
 import logo from './logo.svg';
+import { useState } from 'react';
+import { Switch, Route, Redirect ,BrowserRouter} from 'react-router-dom';
+import Navigation from './components/Navigation';
+import MinCost from './components/MinCost';
+import MinDistance from './components/MinDistance';
 import './App.css';
 
 function App() {
+  const [numberOfCities,setNumber]=useState('');
+  var inputNumber=0;
+  function numberChangeHandler(event)
+  {
+    inputNumber=event.target.value
+    setNumber(inputNumber)
+  }
+
+  function numberSubmitHandler()
+  {
+
+  }
   return (
+    <BrowserRouter>
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="Heading">TravelSimplified</h1>
+      <h1 className="Heading"> </h1>
+      <div className="number">
+      <input 
+      value={numberOfCities}
+      placeholder="How many cities are you travelling?"
+      onChange={numberChangeHandler}
+      className="Input"
+      />
+      </div>
+      {(numberOfCities !== '' && numberOfCities>0)? 
+      (
+      <div>
+      <div className="number">
+      <Navigation/>
+      </div>
+      <Switch>
+      <Route exact path="/" >
+      <MinDistance number={numberOfCities}/>
+      </Route>
+      <Route exact path='/minimumcost' >
+      <MinCost number={numberOfCities}/>
+      </Route>
+      </Switch>
+      </div>
+      )
+      :
+      (<div/>)}
+    </header>
     </div>
+    </BrowserRouter>
   );
 }
 
