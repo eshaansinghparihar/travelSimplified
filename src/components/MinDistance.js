@@ -22,21 +22,20 @@ function MinDistance(){
     //     [[],[],[]]
     // ];
     let distanceMatrix=[],timeMatrix=[],steps=[];
-    for(let i=0;i<cities.length;i++)
-    {
-        distanceMatrix[i] = [];
-        timeMatrix[i] = [];
-        steps[i]=[];
-        for(let j=0;j<cities.length;j++)
+    function initializeMatrix(){
+        for(let i=0;i<cities.length;i++)
         {
-            // distanceMatrix[j] = [];
-            // timeMatrix[j] = [];
-            steps[j]=[];
-            distanceMatrix[i][j]=0
-            timeMatrix[i][j]=0
+            distanceMatrix[i] = [];
+            timeMatrix[i] = [];
+            steps[i]=[];
+            for(let j=0;j<cities.length;j++)
+            {
+                steps[j]=[];
+                distanceMatrix[i][j]=0
+                timeMatrix[i][j]=0
+            }
         }
     }
-
     
     const changeHandler = (e, index) => {
         const { name, value } = e.target;
@@ -55,72 +54,67 @@ function MinDistance(){
         setCities([...cities, {cityname:"",longitude:0,latitude:0}]);
     };
     const setCoordinates=()=>{
+        var latt=0,longi=0;
         for(let i=0;i<cities.length;i++)
         {
             var urltoCoordinates = "https://api.opentripmap.com/0.1/en/places/geoname?apikey=5ae2e3f221c38a28845f05b60e7759b29878873a69598c9d75b72fbe&name="+(cities[i].cityname);
-            var lattitude=0,longitude=0;
             fetch(urltoCoordinates)
             .then(response => response.json())
             .then(coordinates=> {
-            lattitude=coordinates.lat;
-            longitude=coordinates.lon;
-            cities[i].latitude=lattitude;
-            cities[i].longitude=longitude;
-        }).catch(errorHandler) 
+            latt=coordinates.lat;
+            longi=coordinates.lon;
+            console.log(cities[i].cityname+ longi+","+latt);
+            cities[i].latitude=latt;
+            cities[i].longitude=longi;
+        })
+        .catch(errorHandler) 
         }
     }
 
-    const createMatrix = () => {
-        for(let i=0;i<cities.length;i++)
-        {
-            for(let j=0;j<cities.length;j++)
-            {
-                distanceMatrix[i][j]=0
-                timeMatrix[i][j]=0
-            }
-        }
-        for(let i=0;i<cities.length;i++)
-        {
-            for(let j=0;j<cities.length;j++)
-            {
-                if(i!==j)
-                {
-                    var urlforDistance="https://api.mapbox.com/directions/v5/mapbox/driving/"+cities[i].longitude+"%2C"+cities[i].latitude+"%3B"+cities[j].longitude+"%2C"+cities[j].latitude+"?alternatives=true&geometries=geojson&steps=true&access_token=pk.eyJ1IjoiZXNoYWFuc2luZ2hwYXJpaGFyIiwiYSI6ImNrbWE4YmFzNTE1d2EydW51c3R5OWp1N3oifQ.jaII766AYtHlJyfp-a9mfA"
-                    // console.log(cities[i].cityname+"-->"+cities[j].cityname)
-                    fetch(urlforDistance)
-                    .then(response => response.json())
-                    .then(data=>{
-                        let routeArray=data.routes;
-                        let shortestRoute=routeArray[0];
-                        let distance=0,time=0,leg=[],step=[];
-                        console.log(shortestRoute);
-                        // if(shortestRoute.weight !== 0 )
-                        // {
-                        //     distance=shortestRoute.distance;
-                        //     distance=distance/1000;
-                        //     time=shortestRoute.duration;
-                        //     time=time/3600;
-                        //     leg=shortestRoute.legs
-                        //     step=leg[0].steps;
-                        //     distanceMatrix[i][j]=distance;
-                        //     timeMatrix[i][j]=time;
-                        //     steps[i][j]=step;   
-                        // }
-                        // else
-                        // {
-                        //     setMessage("No Route Found !")
-                        // }
+    // const createMatrix = () => {
+    //     for(let i=0;i<cities.length;i++)
+    //     {
+    //         for(let j=0;j<cities.length;j++)
+    //         {
+    //             if(i!==j)
+    //             {
+    //                 var urlforDistance="https://api.mapbox.com/directions/v5/mapbox/driving/"+cities[i].longitude+"%2C"+cities[i].latitude+"%3B"+cities[j].longitude+"%2C"+cities[j].latitude+"?alternatives=true&geometries=geojson&steps=true&access_token=pk.eyJ1IjoiZXNoYWFuc2luZ2hwYXJpaGFyIiwiYSI6ImNrbWE4YmFzNTE1d2EydW51c3R5OWp1N3oifQ.jaII766AYtHlJyfp-a9mfA"
+    //                 // console.log(cities[i].cityname+"-->"+cities[j].cityname)
+    //                 fetch(urlforDistance)
+    //                 .then(response => response.json())
+    //                 .then(data=>{
+    //                     let routeArray=data.routes;
+    //                     let shortestRoute=routeArray[0];
+    //                     let distance=0,time=0,leg=[],step=[];
+    //                     // console.log(shortestRoute);
+    //                     if(shortestRoute.weight !== 0 )
+    //                     {
+    //                         distance=shortestRoute.distance;
+    //                         distance=distance/1000;
+    //                         time=shortestRoute.duration;
+    //                         time=time/3600;
+    //                         leg=shortestRoute.legs
+    //                         step=leg[0].steps;
+    //                         distanceMatrix[i][j]=distance;
+    //                         timeMatrix[i][j]=time;
+    //                         steps[i][j]=step;   
+    //                     }
+    //                     else
+    //                     {
+    //                         setMessage("No Route Found !")
+    //                     }
                         
                         
-                    })
-                }
-            }
-        }
-    }
+    //                 })
+    //                 .catch(errorHandler)
+    //             }
+    //         }
+    //     }
+    // }
     const calculatePath=()=>{
         setMessage(" Have some patience sweetie ! ");
+        initializeMatrix();
         setCoordinates();
-        createMatrix();
         console.log(distanceMatrix)
         console.log(timeMatrix)
         let stepArrayElem=[]
